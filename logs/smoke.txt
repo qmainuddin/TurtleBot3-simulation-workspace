@@ -1,0 +1,4 @@
+1 trials in plan(s) ['smoke']; results -> /home/qms/vm-share/task02/smoke
+[1/1] smoke_open_field_vfh_default_s0 (attempt 1) ...
+    -> REACHED success=1 time=38.3s path=6.702m collisions=0 min_clear=0.1392 rtf=0.994 (wall 55s)
+ALL PLANS FINISHED

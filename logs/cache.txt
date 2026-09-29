@@ -1,0 +1,5 @@
+bindfs view : 0 345179961 8380 2026-09-28 04:14:46.645594816 +1300
+9p raw view : sudo: a password is required sudo: a password is required
+share on /mnt/utm type 9p (rw,relatime,access=client,trans=virtio)
+/mnt/utm on /home/qms/vm-share type fuse (rw,relatime,user_id=0,group_id=0,default_permissions,allow_other,x-systemd.requires=/mnt/utm,_netdev)
+CC-DONE

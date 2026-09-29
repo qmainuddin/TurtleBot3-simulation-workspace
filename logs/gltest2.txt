@@ -1,0 +1,50 @@
+total 0
+drwxr-xr-x   3 root root        100 Sep 28 01:07 .
+drwxr-xr-x  19 root root       4100 Sep 28 01:07 ..
+drwxr-xr-x   2 root root         80 Sep 28 01:07 by-path
+crw-rw----+  1 root video  226,   0 Sep 28 01:07 card0
+crw-rw----+  1 root render 226, 128 Sep 28 01:07 renderD128
+uid=1000(qms) gid=1000(qms) groups=1000(qms),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),114(lpadmin),123(lxd)
+sw_softpipe      server=dead  distinct_ranges=0    EGL debug: Found 'LIBGL_ALWAYS_SOFTWARE' set
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     [1;32mServing graph information on [[0m[1;32m/world/open_field[0m[1;32m/[0mlibGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+sw_surf_swr      server=dead  distinct_ranges=0    EGL debug: Found 'LIBGL_ALWAYS_SOFTWARE' set
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+sw_kms           server=alive distinct_ranges=295  EGL debug: Found 'LIBGL_ALWAYS_SOFTWARE' set
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     [1;32m[Msg] [0m[1libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+virgl_ovr        server=alive distinct_ranges=156  EGL debug: using driver virtio_gpu for 34
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     using driver virtio_gpu for 30
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+sw_llvm_ovr      server=dead  distinct_ranges=0    EGL debug: Found 'LIBGL_ALWAYS_SOFTWARE' set
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     [1;32m[Msg] [0m[1libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+sw_nodev         server=dead  distinct_ranges=0    EGL debug: Found 'LIBGL_ALWAYS_SOFTWARE' set
+     [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32mcmd_vel[0m[1;32m][0m[1;32m[0m
+     [1;36m[Dbg] [SystemManager.cc:80] [0m[1;36mLoaded system [[0m[1;36mgz::sim::systems::DiffDrive[0m[1;36m] for entity [[0m[1;36m54[0m[1;36m][0m[1;36m[0m
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+     libGL: Can't open configuration file /etc/drirc: No such file or directory.
+     libGL: Can't open configuration file /home/qms/.drirc: No such file or directory.
+DONE
