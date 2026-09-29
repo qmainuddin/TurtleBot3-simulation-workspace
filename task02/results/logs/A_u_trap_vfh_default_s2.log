@@ -1,0 +1,72 @@
+ros2 launch tb3_nav_task trial.launch.py world:=u_trap strategy:=vfh gui:=false trial_id:=A_u_trap_vfh_default_s2 plan:=A variant:=2 start_x:=-2.79 start_y:=0.019 start_yaw:=0.536 nav_params:={} results_dir:=/home/qms/vm-share/task02/results timeout:=200.0 verbose:=1
+[INFO] [launch]: All log files can be found below /home/qms/.ros/log/2026-09-28-05-22-16-666175-qms-39267
+[INFO] [launch]: Default logging verbosity is set to INFO
+urdf_file_name : turtlebot3_burger.urdf
+[INFO] [gazebo-1]: process started with pid [39270]
+[INFO] [create-2]: process started with pid [39271]
+[INFO] [parameter_bridge-3]: process started with pid [39273]
+[INFO] [parameter_bridge-4]: process started with pid [39274]
+[INFO] [robot_state_publisher-5]: process started with pid [39275]
+[INFO] [trial_monitor-6]: process started with pid [39276]
+[robot_state_publisher-5] [INFO] [1790526137.214457089] [robot_state_publisher]: Robot initialized
+[create-2] [INFO] [1790526137.242366402] [ros_gz_sim]: Requesting list of world names.
+[parameter_bridge-4] [INFO] [1790526137.280748457] [ground_truth_bridge]: Creating GZ->ROS Bridge: [/model/burger/pose (gz.msgs.Pose) -> /model/burger/pose (geometry_msgs/msg/PoseStamped)] (Lazy 0)
+[create-2] [INFO] [1790526137.771739962] [ros_gz_sim]: Entity creation successful.
+[INFO] [create-2]: process has finished cleanly [pid 39271]
+[trial_monitor-6] [INFO] [1790526137.949983378] [trial_monitor]: monitoring trial A_u_trap_vfh_default_s2 in u_trap, timeout 200 s sim
+[parameter_bridge-3] [INFO] [1790526138.259197095] [tb3_bridge]: Creating GZ->ROS Bridge: [clock (gz.msgs.Clock) -> clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.263392308] [tb3_bridge]: Creating GZ->ROS Bridge: [joint_states (gz.msgs.Model) -> joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.268348781] [tb3_bridge]: Creating GZ->ROS Bridge: [odom (gz.msgs.Odometry) -> odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.271874487] [tb3_bridge]: Creating GZ->ROS Bridge: [tf (gz.msgs.Pose_V) -> tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.275076856] [tb3_bridge]: Creating ROS->GZ Bridge: [cmd_vel (geometry_msgs/msg/TwistStamped) -> cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.276938794] [tb3_bridge]: Creating GZ->ROS Bridge: [imu (gz.msgs.IMU) -> imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790526138.278649396] [tb3_bridge]: Creating GZ->ROS Bridge: [scan (gz.msgs.LaserScan) -> scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot3_burger"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/tmp/tb3_nav_task_burger.sdf:L126]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gazebo-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[INFO] [navigator-7]: process started with pid [39455]
+[navigator-7] [INFO] [1790526140.918035566] [navigator]: navigator: strategy=vfh localization=odom_imu shaping=True params={'v_max': 0.18, 'w_max': 1.5, 'safety': 0.12, 'lookahead': 1.0, 'bin_deg': 5.0, 'k_w': 2.0, 'w_goal': 1.0, 'w_turn': 0.25, 'w_prev': 0.25, 'slow_dist': 0.6, 'stop_dist': 0.1, 'goal_tol': 0.2} start=(-2.79, 0.019, 0.536) goal=(2.8, 0.0)
+[navigator-7] [INFO] [1790526140.953834134] [navigator]: publishing TwistStamped on /cmd_vel
+[parameter_bridge-3] [INFO] [1790526140.954250555] [tb3_bridge]: Passing message from ROS geometry_msgs/msg/TwistStamped to Gazebo gz.msgs.Twist (showing msg only once per type)
+[navigator-7] [INFO] [1790526141.137977864] [navigator]: WAITING -> GO_GOAL  pose=(-2.79,0.02,31deg) goal_dist=5.59
+[trial_monitor-6] [INFO] [1790526141.154086420] [trial_monitor]: trial started (first active control cycle)
+[navigator-7] [INFO] [1790526154.788544039] [navigator]: GO_GOAL -> AVOID  pose=(-0.40,-0.00,-2deg) goal_dist=3.20
+[trial_monitor-6] [INFO] [1790526341.656074442] [trial_monitor]: RESULT TIMEOUT: success=False time=200.1s path=9.04m collisions=0 min_clear=0.417m goal_err=2.915m est_err=0.380m odom_err=0.240m rtf=0.999
+[INFO] [trial_monitor-6]: process has finished cleanly [pid 39276]
+[INFO] [navigator-7]: sending signal 'SIGINT' to process[navigator-7]
+[INFO] [robot_state_publisher-5]: sending signal 'SIGINT' to process[robot_state_publisher-5]
+[INFO] [parameter_bridge-4]: sending signal 'SIGINT' to process[parameter_bridge-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [gazebo-1]: sending signal 'SIGINT' to process[gazebo-1]
+[robot_state_publisher-5] [INFO] [1790526341.866019782] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-4] [INFO] [1790526341.868698062] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-3] [INFO] [1790526341.873071568] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigator-7] Traceback (most recent call last):
+[navigator-7]   File "/home/qms/ros_ws/install/tb3_nav_task/lib/tb3_nav_task/navigator", line 33, in <module>
+[navigator-7]     sys.exit(load_entry_point('tb3-nav-task', 'console_scripts', 'navigator')())
+[navigator-7]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[navigator-7]   File "/home/qms/ros_ws/build/tb3_nav_task/tb3_nav_task/navigator.py", line 195, in main
+[navigator-7]     rclpy.spin(node)
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+[navigator-7]     executor.spin_once()
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+[navigator-7]     self._spin_once_impl(timeout_sec)
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 918, in _spin_once_impl
+[navigator-7]     raise handler.exception()
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py", line 286, in _execute_coroutine_step
+[navigator-7]     result = coro.send(None)
+[navigator-7]              ^^^^^^^^^^^^^^^
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 584, in handler
+[navigator-7]     call_coroutine = take_from_wait_list(entity)
+[navigator-7]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[navigator-7]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 470, in _take_subscription
+[navigator-7]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[navigator-7]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[navigator-7] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 39273]
+[INFO] [parameter_bridge-4]: process has finished cleanly [pid 39274]
+[INFO] [robot_state_publisher-5]: process has finished cleanly [pid 39275]
+[ERROR] [navigator-7]: process has died [pid 39455, exit code 1, cmd '/home/qms/ros_ws/install/tb3_nav_task/lib/tb3_nav_task/navigator --ros-args --params-file /tmp/launch_params_upsa5c2e'].
+[ERROR] [gazebo-1]: process[gazebo-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gazebo-1]: sending signal 'SIGTERM' to process[gazebo-1]
+[ERROR] [gazebo-1]: process has died [pid 39270, exit code -15, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim -r -s -v1 /home/qms/ros_ws/install/tb3_nav_task/share/tb3_nav_task/worlds/u_trap.sdf --force-version 8'].
+[INFO] [launch]: process[gazebo-1] was required: shutting down launched system

@@ -1,0 +1,7 @@
+ogre2_default          server=dead  scan=no  
+ogre2_sw               server=dead  scan=no  Segmentation fault
+ogre2_sw_surf          server=dead  scan=no  Segmentation fault
+ogre2_sw_x11           server=dead  scan=no  Segmentation fault
+ogre1_default          server=alive scan=YES 
+ogre1_sw               server=alive scan=YES 
+DONE

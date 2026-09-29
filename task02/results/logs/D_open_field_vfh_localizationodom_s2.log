@@ -1,0 +1,62 @@
+ros2 launch tb3_nav_task trial.launch.py world:=open_field strategy:=vfh gui:=false trial_id:=D_open_field_vfh_localizationodom_s2 plan:=D variant:=2 start_x:=-2.902 start_y:=-1.817 start_yaw:=-0.284 nav_params:={"localization": "odom"} results_dir:=/home/qms/vm-share/task02/results timeout:=200.0 verbose:=1
+[INFO] [launch]: All log files can be found below /home/qms/.ros/log/2026-09-28-06-24-48-352574-qms-49771
+[INFO] [launch]: Default logging verbosity is set to INFO
+urdf_file_name : turtlebot3_burger.urdf
+[INFO] [gazebo-1]: process started with pid [49774]
+[INFO] [create-2]: process started with pid [49775]
+[INFO] [parameter_bridge-3]: process started with pid [49776]
+[INFO] [parameter_bridge-4]: process started with pid [49778]
+[INFO] [robot_state_publisher-5]: process started with pid [49779]
+[INFO] [trial_monitor-6]: process started with pid [49780]
+[robot_state_publisher-5] [INFO] [1790529888.897926408] [robot_state_publisher]: Robot initialized
+[create-2] [INFO] [1790529888.917294445] [ros_gz_sim]: Requesting list of world names.
+[parameter_bridge-4] [INFO] [1790529888.926892465] [ground_truth_bridge]: Creating GZ->ROS Bridge: [/model/burger/pose (gz.msgs.Pose) -> /model/burger/pose (geometry_msgs/msg/PoseStamped)] (Lazy 0)
+[create-2] [INFO] [1790529889.407289186] [ros_gz_sim]: Entity creation successful.
+[INFO] [create-2]: process has finished cleanly [pid 49775]
+[trial_monitor-6] [INFO] [1790529889.614271060] [trial_monitor]: monitoring trial D_open_field_vfh_localizationodom_s2 in open_field, timeout 200 s sim
+[parameter_bridge-3] [INFO] [1790529889.918362996] [tb3_bridge]: Creating GZ->ROS Bridge: [clock (gz.msgs.Clock) -> clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.925881821] [tb3_bridge]: Creating GZ->ROS Bridge: [joint_states (gz.msgs.Model) -> joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.934584138] [tb3_bridge]: Creating GZ->ROS Bridge: [odom (gz.msgs.Odometry) -> odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.939900895] [tb3_bridge]: Creating GZ->ROS Bridge: [tf (gz.msgs.Pose_V) -> tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.942986707] [tb3_bridge]: Creating ROS->GZ Bridge: [cmd_vel (geometry_msgs/msg/TwistStamped) -> cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.946650350] [tb3_bridge]: Creating GZ->ROS Bridge: [imu (gz.msgs.IMU) -> imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790529889.947850300] [tb3_bridge]: Creating GZ->ROS Bridge: [scan (gz.msgs.LaserScan) -> scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot3_burger"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/tmp/tb3_nav_task_burger.sdf:L126]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gazebo-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[INFO] [navigator-7]: process started with pid [49959]
+[navigator-7] [INFO] [1790529892.596959461] [navigator]: navigator: strategy=vfh localization=odom shaping=True params={'v_max': 0.18, 'w_max': 1.5, 'safety': 0.12, 'lookahead': 1.0, 'bin_deg': 5.0, 'k_w': 2.0, 'w_goal': 1.0, 'w_turn': 0.25, 'w_prev': 0.25, 'slow_dist': 0.6, 'stop_dist': 0.1, 'goal_tol': 0.2} start=(-2.902, -1.817, -0.284) goal=(2.8, 1.8)
+[navigator-7] [INFO] [1790529892.633693136] [navigator]: publishing TwistStamped on /cmd_vel
+[parameter_bridge-3] [INFO] [1790529892.634306632] [tb3_bridge]: Passing message from ROS geometry_msgs/msg/TwistStamped to Gazebo gz.msgs.Twist (showing msg only once per type)
+[navigator-7] [INFO] [1790529892.722039805] [navigator]: WAITING -> GO_GOAL  pose=(-2.90,-1.82,-16deg) goal_dist=6.75
+[trial_monitor-6] [INFO] [1790529892.737417995] [trial_monitor]: trial started (first active control cycle)
+[navigator-7] [INFO] [1790529896.363378671] [navigator]: GO_GOAL -> AVOID  pose=(-2.39,-1.57,31deg) goal_dist=6.19
+[navigator-7] [INFO] [1790529902.177214358] [navigator]: AVOID -> GO_GOAL  pose=(-1.52,-1.37,-39deg) goal_dist=5.36
+[navigator-7] [INFO] [1790529902.336853926] [navigator]: GO_GOAL -> AVOID  pose=(-1.52,-1.37,-31deg) goal_dist=5.36
+[navigator-7] [INFO] [1790529908.778068627] [navigator]: AVOID -> GO_GOAL  pose=(-1.31,-1.21,-83deg) goal_dist=5.10
+[navigator-7] [INFO] [1790529909.036607225] [navigator]: GO_GOAL -> AVOID  pose=(-1.31,-1.21,-77deg) goal_dist=5.10
+[navigator-7] [INFO] [1790529914.478833946] [navigator]: AVOID -> GO_GOAL  pose=(-1.19,-1.10,70deg) goal_dist=4.93
+[navigator-7] [INFO] [1790529917.793808246] [navigator]: GO_GOAL -> AVOID  pose=(-0.75,-0.73,35deg) goal_dist=4.36
+[navigator-7] [INFO] [1790529924.395509253] [navigator]: AVOID -> GO_GOAL  pose=(0.33,-0.26,27deg) goal_dist=3.21
+[navigator-7] [INFO] [1790529926.192904025] [navigator]: GO_GOAL -> AVOID  pose=(0.59,-0.07,38deg) goal_dist=2.89
+[navigator-7] [INFO] [1790529933.193105034] [navigator]: AVOID -> GO_GOAL  pose=(1.75,0.38,25deg) goal_dist=1.77
+[navigator-7] [INFO] [1790529933.352111044] [navigator]: GO_GOAL -> AVOID  pose=(1.78,0.39,35deg) goal_dist=1.74
+[navigator-7] [INFO] [1790529933.552068611] [navigator]: AVOID -> GO_GOAL  pose=(1.81,0.41,42deg) goal_dist=1.71
+[navigator-7] [INFO] [1790529942.097943520] [navigator]: GO_GOAL -> REACHED  pose=(2.71,1.64,59deg) goal_dist=0.19
+[trial_monitor-6] [INFO] [1790529942.350709916] [trial_monitor]: RESULT REACHED: success=True time=49.5s path=7.34m collisions=0 min_clear=0.105m goal_err=0.248m est_err=0.299m odom_err=0.299m rtf=0.999
+[INFO] [trial_monitor-6]: process has finished cleanly [pid 49780]
+[INFO] [navigator-7]: sending signal 'SIGINT' to process[navigator-7]
+[INFO] [robot_state_publisher-5]: sending signal 'SIGINT' to process[robot_state_publisher-5]
+[INFO] [parameter_bridge-4]: sending signal 'SIGINT' to process[parameter_bridge-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [gazebo-1]: sending signal 'SIGINT' to process[gazebo-1]
+[robot_state_publisher-5] [INFO] [1790529942.531848958] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-4] [INFO] [1790529942.534576526] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-3] [INFO] [1790529942.536636764] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [robot_state_publisher-5]: process has finished cleanly [pid 49779]
+[INFO] [parameter_bridge-4]: process has finished cleanly [pid 49778]
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 49776]
+[INFO] [navigator-7]: process has finished cleanly [pid 49959]
+[ERROR] [gazebo-1]: process[gazebo-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gazebo-1]: sending signal 'SIGTERM' to process[gazebo-1]
+[ERROR] [gazebo-1]: process has died [pid 49774, exit code -15, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim -r -s -v1 /home/qms/ros_ws/install/tb3_nav_task/share/tb3_nav_task/worlds/open_field.sdf --force-version 8'].
+[INFO] [launch]: process[gazebo-1] was required: shutting down launched system

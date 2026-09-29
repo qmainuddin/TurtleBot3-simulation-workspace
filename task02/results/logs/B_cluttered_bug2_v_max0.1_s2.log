@@ -1,0 +1,51 @@
+ros2 launch tb3_nav_task trial.launch.py world:=cluttered strategy:=bug2 gui:=false trial_id:=B_cluttered_bug2_v_max0.1_s2 plan:=B variant:=2 start_x:=-2.882 start_y:=-2.077 start_yaw:=-0.273 nav_params:={"v_max": 0.1} results_dir:=/home/qms/vm-share/task02/results timeout:=200.0 verbose:=1
+[INFO] [launch]: All log files can be found below /home/qms/.ros/log/2026-09-28-05-50-44-467934-qms-43607
+[INFO] [launch]: Default logging verbosity is set to INFO
+urdf_file_name : turtlebot3_burger.urdf
+[INFO] [gazebo-1]: process started with pid [43610]
+[INFO] [create-2]: process started with pid [43611]
+[INFO] [parameter_bridge-3]: process started with pid [43612]
+[INFO] [parameter_bridge-4]: process started with pid [43614]
+[INFO] [robot_state_publisher-5]: process started with pid [43615]
+[INFO] [trial_monitor-6]: process started with pid [43616]
+[robot_state_publisher-5] [INFO] [1790527844.989975700] [robot_state_publisher]: Robot initialized
+[create-2] [INFO] [1790527844.994897524] [ros_gz_sim]: Requesting list of world names.
+[parameter_bridge-4] [INFO] [1790527845.009060152] [ground_truth_bridge]: Creating GZ->ROS Bridge: [/model/burger/pose (gz.msgs.Pose) -> /model/burger/pose (geometry_msgs/msg/PoseStamped)] (Lazy 0)
+[create-2] [INFO] [1790527845.504855048] [ros_gz_sim]: Entity creation successful.
+[INFO] [create-2]: process has finished cleanly [pid 43611]
+[trial_monitor-6] [INFO] [1790527845.665909659] [trial_monitor]: monitoring trial B_cluttered_bug2_v_max0.1_s2 in cluttered, timeout 200 s sim
+[parameter_bridge-3] [INFO] [1790527846.039719651] [tb3_bridge]: Creating GZ->ROS Bridge: [clock (gz.msgs.Clock) -> clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.046077871] [tb3_bridge]: Creating GZ->ROS Bridge: [joint_states (gz.msgs.Model) -> joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.053081351] [tb3_bridge]: Creating GZ->ROS Bridge: [odom (gz.msgs.Odometry) -> odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.056984117] [tb3_bridge]: Creating GZ->ROS Bridge: [tf (gz.msgs.Pose_V) -> tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.060212582] [tb3_bridge]: Creating ROS->GZ Bridge: [cmd_vel (geometry_msgs/msg/TwistStamped) -> cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.062095902] [tb3_bridge]: Creating GZ->ROS Bridge: [imu (gz.msgs.IMU) -> imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1790527846.063510964] [tb3_bridge]: Creating GZ->ROS Bridge: [scan (gz.msgs.LaserScan) -> scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot3_burger"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/tmp/tb3_nav_task_burger.sdf:L126]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gazebo-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[INFO] [navigator-7]: process started with pid [43795]
+[navigator-7] [INFO] [1790527848.679474757] [navigator]: navigator: strategy=bug2 localization=odom_imu shaping=True params={'v_max': 0.1, 'w_max': 1.5, 'hit_dist': 0.3, 'd_follow': 0.3, 'k_head': 2.0, 'k_wall': 3.0, 'mline_tol': 0.1, 'leave_progress': 0.15, 'min_follow': 0.5, 'goal_tol': 0.2} start=(-2.882, -2.077, -0.273) goal=(2.9, 2.0)
+[navigator-7] [INFO] [1790527848.717323154] [navigator]: publishing TwistStamped on /cmd_vel
+[parameter_bridge-3] [INFO] [1790527848.718516047] [tb3_bridge]: Passing message from ROS geometry_msgs/msg/TwistStamped to Gazebo gz.msgs.Twist (showing msg only once per type)
+[navigator-7] [INFO] [1790527848.813226584] [navigator]: WAITING -> GO_GOAL  pose=(-2.88,-2.08,-16deg) goal_dist=7.07
+[trial_monitor-6] [INFO] [1790527848.827932594] [trial_monitor]: trial started (first active control cycle)
+[navigator-7] [INFO] [1790527919.362290792] [navigator]: GO_GOAL -> REACHED  pose=(2.74,1.89,35deg) goal_dist=0.19
+[trial_monitor-6] [INFO] [1790527919.628915102] [trial_monitor]: RESULT REACHED: success=True time=69.9s path=6.89m collisions=0 min_clear=0.065m goal_err=0.211m est_err=0.023m odom_err=0.761m rtf=0.989
+[INFO] [trial_monitor-6]: process has finished cleanly [pid 43616]
+[INFO] [navigator-7]: sending signal 'SIGINT' to process[navigator-7]
+[INFO] [robot_state_publisher-5]: sending signal 'SIGINT' to process[robot_state_publisher-5]
+[INFO] [parameter_bridge-4]: sending signal 'SIGINT' to process[parameter_bridge-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [gazebo-1]: sending signal 'SIGINT' to process[gazebo-1]
+[robot_state_publisher-5] [INFO] [1790527919.831832023] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-4] [INFO] [1790527919.835327032] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-3] [INFO] [1790527919.837404562] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-3] Fatal glibc error: tpp.c:83 (__pthread_tpp_change_priority): assertion failed: new_prio == -1 || (new_prio >= fifo_min_prio && new_prio <= fifo_max_prio)
+[INFO] [parameter_bridge-4]: process has finished cleanly [pid 43614]
+[INFO] [robot_state_publisher-5]: process has finished cleanly [pid 43615]
+[INFO] [navigator-7]: process has finished cleanly [pid 43795]
+[ERROR] [parameter_bridge-3]: process has died [pid 43612, exit code -6, cmd '/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args -p config_file:=/opt/ros/jazzy/share/turtlebot3_gazebo/params/turtlebot3_burger_bridge.yaml --ros-args -r __node:=tb3_bridge'].
+[ERROR] [gazebo-1]: process[gazebo-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gazebo-1]: sending signal 'SIGTERM' to process[gazebo-1]
+[ERROR] [gazebo-1]: process has died [pid 43610, exit code -15, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim -r -s -v1 /home/qms/ros_ws/install/tb3_nav_task/share/tb3_nav_task/worlds/cluttered.sdf --force-version 8'].
+[INFO] [launch]: process[gazebo-1] was required: shutting down launched system

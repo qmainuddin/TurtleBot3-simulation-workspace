@@ -1,0 +1,16 @@
+leftover gz: 0
+Summary: 1 package finished [4.57s]
+installed launch: /home/qms/vm-share/ros_ws/src/tb3_nav_task/launch/trial.launch.py  prepare_model=2
+SCAN frame=base_scan n=360 angle_min=0.000 angle_max=6.280 inc=0.01749 range=[0.12,3.50] finite=295 min=0.646201491355896 max=3.4283182621002197
+     0 deg: inf
+    45 deg: inf
+    90 deg: inf
+   135 deg: 0.920
+   180 deg: 0.648
+   225 deg: 0.915
+   270 deg: 0.704
+   315 deg: 0.990
+ODOM: (0.0, -0.0)
+GT  : (-2.809, -1.800, -0.0 deg) world=open_field
+LIDAR ACCURACY over 10 scans, 3600 beams: compared=2950 bias=-0.4 mm  MAE=11.1 mm  RMSE=16.8 mm  max|err|=103.1 mm  |err|>5cm: 67  hit/miss disagreements=0
+PROBE-DONE
