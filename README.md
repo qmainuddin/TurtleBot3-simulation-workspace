@@ -6,7 +6,7 @@ Shared between the Mac and the Ubuntu VM (UTM **VirtFS**, share tag `share`).
 |---|---|
 | `.../COSC471-Robotics/vm-share` | `~/vm-share` (bindfs view of `/mnt/utm`) |
 
-Code is edited on the Mac (by you or Claude); it is **built and run inside the VM**.
+Code is edited on the Mac; it is **built and run inside the VM**.
 
 ## Stack
 
