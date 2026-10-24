@@ -16,9 +16,20 @@ Experiment design (fixed before collecting data)
                            default gyro-fused estimate (localization=odom_imu)
   E  command shaping     : bug2, open_field + cluttered, CommandShaper disabled (shaping=0)
                            x 3 variants; compared with plan A (shaping on)
+  F  Trekker maze        : maze world x {vfh, bug2} x 4 start variants, default parameters
+  H  improved follower  : maze world, bug2 with the wall-alignment term k_align 2.0 x 4 variants.
+                           Added after plan F showed the original (P-only) wall follower weaving
+                           and U-turning in the 0.65 m corridor; compared with plan F bug2
+  G  maze parameters     : maze world, bug2 with k_align 2.0 (plan H) x 3 variants with
+                           (a) v_max 0.22, (b) d_follow 0.25, (c) wheel-only odometry
+                           (localization=odom); compared with plan H
+  I  turn-first leave    : maze world, bug2 with k_align 2.0 and turn_first (no new hit while
+                           turning toward the goal after LEAVE) x 4 variants. Added after the
+                           GUI demo re-hit the wall right after leaving it near the goal
 Start variant 0 is the nominal start pose; variants 1..n add a deterministic offset
 (+/-0.15 m, +/-0.6 rad) so repeated trials are not identical (seeded, reproducible).
-Every trial: same robot, physics, goal tolerance (0.20 m nav / 0.30 m success), timeout 200 s sim.
+Every trial: same robot, physics, goal tolerance (0.20 m nav / 0.30 m success), timeout 200 s sim
+(600 s in the maze, whose only route is ~3x the straight-line distance).
 """
 import argparse
 import csv
@@ -38,6 +49,11 @@ from tb3_nav_task.worlds import WORLDS  # noqa: E402
 
 DEFAULT_RESULTS = os.path.expanduser('~/vm-share/task02/results')
 TIMEOUT_SIM = 200.0
+TIMEOUT_BY_WORLD = {'maze': 600.0}
+
+
+def timeout_for(world: str) -> float:
+    return TIMEOUT_BY_WORLD.get(world, TIMEOUT_SIM)
 
 
 def start_variant(world_name: str, k: int):
@@ -91,6 +107,20 @@ def build_plan(names):
         for world in ('open_field', 'cluttered'):
             for k in range(3):
                 add('E', world, 'bug2', k, {'shaping': 0})
+    if 'H' in names:
+        for k in range(4):
+            add('H', 'maze', 'bug2', k, {'k_align': 2.0})
+    if 'I' in names:
+        for k in range(4):
+            add('I', 'maze', 'bug2', k, {'k_align': 2.0, 'turn_first': True})
+    if 'F' in names:
+        for strategy in ('vfh', 'bug2'):
+            for k in range(4):
+                add('F', 'maze', strategy, k, {})
+    if 'G' in names:
+        for params in ({'v_max': 0.22}, {'d_follow': 0.25}, {'localization': 'odom'}):
+            for k in range(3):
+                add('G', 'maze', 'bug2', k, dict(params, k_align=2.0))
     return trials
 
 
@@ -119,10 +149,10 @@ def run_trial(t, results_dir, gui, min_rtf):
            f'trial_id:={t["trial_id"]}', f'plan:={t["plan"]}', f'variant:={t["variant"]}',
            f'start_x:={x}', f'start_y:={y}', f'start_yaw:={yaw}',
            f'nav_params:={json.dumps(t["params"])}', f'results_dir:={results_dir}',
-           f'timeout:={TIMEOUT_SIM}', 'verbose:=1']
+           f'timeout:={timeout_for(t["world"])}', 'verbose:=1']
     os.makedirs(os.path.join(results_dir, 'logs'), exist_ok=True)
     log_path = os.path.join(results_dir, 'logs', f'{t["trial_id"]}.log')
-    wall_limit = TIMEOUT_SIM / min_rtf + 120
+    wall_limit = timeout_for(t['world']) / min_rtf + 120
     t0 = time.monotonic()
     with open(log_path, 'w') as log:
         log.write(' '.join(cmd) + '\n')

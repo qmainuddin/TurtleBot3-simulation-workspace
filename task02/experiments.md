@@ -153,3 +153,40 @@ Figure: `fig_compute.png`.
 5. **Larger safety margins** increase clearance but cause excessive weaving, which inflates localization error. The default 0.12 m was the best compromise.
 
 **Statistical caution:** only 3–4 trials per condition, with deterministic physics and seeded start offsets. Differences like 16/16 vs 1/12 or 4/4 vs 0/4 are clear, but small numeric differences (e.g. goal error 0.20 vs 0.22 m) are within run-to-run variation. These are simulation results; real-robot behaviour (tyre slip, sensor noise) will differ.
+
+---
+
+## 8. Trekker maze (plans F, H, G, I)
+
+World `maze` (8 m × 6 m; see `explanation.md` §5). Straight start→goal distance 7.77 m; the only route is about 24 m. Timeout 600 s simulated. Figures: `fig_F_maze_trajectories.png`, `fig_H_maze_follower.png`, `fig_G_maze_params.png`.
+
+### 8.1 Plan F — VFH vs Bug2 (default parameters, 4 start poses each)
+
+| Strategy | Success | Time [s] (succ.) | Path [m] (succ.) | Path / straight | Collisions | Min clearance [m] |
+|---|---|---|---|---|---|---|
+| vfh | **0/4** (all timeouts) | – | – | – | 0 | 0.087 |
+| bug2 | **2/4** | 213.6 ± 0.2 | 24.19 ± 0.20 | 3.15 | 0 | 0.044 |
+
+**What the results show:**
+
+- **VFH is trapped every time.** The door of dead-end room N1 faces the goal, so the goal-attraction term pulls the robot through it; inside, every free heading points away from the goal and the robot oscillates in N1 until the timeout (≈ 81 m travelled, 0 collisions).
+- **Bug2 succeeds in half the runs.** Its right-hand boundary following eventually traces the only route (S1 → S2 → S3 → corridor → N3). The two failures came from:
+  - weaving in the 0.65 m corridor until a swing toward the opposite wall triggered an in-place turn and a U-turn (F s0), and
+  - turning off the south wall before reaching the corridor, then leaving at the m-line into dead-end room N2 and cycling (F s2).
+- **The maze is a real step up:** in the three Task 02 worlds Bug2 succeeded 12/12; here 2/4, with paths 3× the straight line.
+
+### 8.2 Controller improvements tested in the maze (after plan F)
+
+| Plan | Change (both off by default, so plans A–F are unchanged) | Status |
+|---|---|---|
+| H | Wall-alignment term `k_align` = 2.0 (PD-like wall following, `explanation.md` §7.5) | Re-run in progress |
+| G | `k_align` 2.0 plus v_max 0.22 / d_follow 0.25 / wheel-only odometry | Re-run in progress |
+| I | `k_align` 2.0 plus `turn_first` (no new hit while turning toward the goal after LEAVE, §7.6) | Re-run in progress |
+
+**Parameter-passing bug (found and fixed on 24 Oct 2026).** The first run of plans H and G requested `k_align` 2.0, but the navigator accepted only a hand-written list of parameter names that lacked `k_align`, so it ran the original follower. Those 13 trials are archived in `results_maze_v1_k_align_not_applied/` with a README.
+
+- That archive is still informative: its plan H is 4 more runs of the original Bug2 (3/4 success), so the original follower reached the goal in **5 of 8** maze runs overall.
+- Its plan G applied v_max 0.22 (2/3), d_follow 0.25 (3/3, with a detour through dead-end room N1, ≈ 309 s) and wheel-only odometry (0/3: the robot reached the goal room but its position estimate was off by 1.6–5.4 m, so it circled there).
+- The navigator now builds its parameter list from the planner's parameter classes, and a unit test checks that every planner parameter can be set from the launch file.
+
+Results of the corrected re-run will be added here when it finishes.

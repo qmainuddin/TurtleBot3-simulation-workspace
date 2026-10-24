@@ -74,6 +74,27 @@ class ScanPoints:
                 best = along
         return best
 
+    def wall_angle(self, lo: float, hi: float, max_dist: float, min_points: int = 8) -> Optional[float]:
+        """Direction of the wall seen in the bearing sector [lo, hi] (robot frame, radians,
+        wrapped to [-pi/2, pi/2]): principal axis of the returns closer than max_dist.
+        0 = wall parallel to the robot's heading; > 0 = wall rotated counter-clockwise, i.e. the
+        robot is yawed toward a wall on its right. None if too few returns."""
+        pts = [(x, y) for b, d, x, y in zip(self.b, self.d, self.px, self.py)
+               if lo <= b <= hi and d < max_dist]
+        if len(pts) < min_points:
+            return None
+        mx = sum(p[0] for p in pts) / len(pts)
+        my = sum(p[1] for p in pts) / len(pts)
+        sxx = sum((p[0] - mx) ** 2 for p in pts)
+        syy = sum((p[1] - my) ** 2 for p in pts)
+        sxy = sum((p[0] - mx) * (p[1] - my) for p in pts)
+        a = 0.5 * math.atan2(2.0 * sxy, sxx - syy)          # principal-axis angle
+        if a > math.pi / 2:
+            a -= math.pi
+        elif a < -math.pi / 2:
+            a += math.pi
+        return a
+
     def sector_min(self, lo: float, hi: float, default: float = math.inf) -> float:
         best = default
         for b, d in zip(self.b, self.d):
@@ -193,6 +214,10 @@ class Bug2Params:
     leave_progress: float = 0.15 # m   must be this much closer to goal than at the hit point
     min_follow: float = 0.50     # m   travel along the boundary before a leave is allowed
     goal_tol: float = 0.20       # m
+    k_align: float = 0.0         # rad/s per rad: wall-alignment (heading) term of the wall
+                                 #   follower; 0 = original P-only follower used in plans A-F
+    turn_first: bool = False     # after LEAVE, rotate toward the goal before a new hit can be
+                                 #   declared (False = original rule used in plans A-H)
 
 
 class Bug2:
@@ -239,7 +264,12 @@ class Bug2:
         info['ahead'] = ahead
 
         if self.state == 'GO_GOAL':
-            if ahead < p.hit_dist and ahead < dist:
+            # Original rule: a hit is declared from the free distance along the CURRENT heading.
+            # Right after LEAVE the robot still faces along the wall it just left, so a wall ahead
+            # can trigger an immediate re-hit with a new (closer) hit point; near the goal this
+            # makes it circle the goal room. turn_first: no hit while still turning in place.
+            turning = abs(bearing) > 0.8
+            if ahead < p.hit_dist and ahead < dist and not (p.turn_first and turning):
                 self.state = 'FOLLOW'
                 self.hit_goal_dist = dist
                 self.follow_travel = 0.0
@@ -279,7 +309,15 @@ class Bug2:
         self.arc_turn = 0.0
         side = min(right, diag / math.cos(math.radians(40)))  # anticipate the wall ahead-right
         err = p.d_follow - side                                # > 0: too close -> turn left
-        w = clamp(p.k_wall * err, p.w_max)
+        w = p.k_wall * err
+        if p.k_align > 0.0:
+            # PD-like wall following: also steer to stay PARALLEL to the wall. The P-only rule
+            # reacts to distance alone and weaves (+/-0.1 m); in a 0.65 m corridor a weave toward
+            # the opposite wall can trip FOLLOW_TURN and make the robot U-turn.
+            phi = scan.wall_angle(math.radians(-115), math.radians(-65), 2.0 * p.d_follow + 0.2)
+            if phi is not None:
+                w += p.k_align * phi
+        w = clamp(w, p.w_max)
         v = p.v_max * max(0.3, 1.0 - abs(err) / p.d_follow)
         v = min(v, p.v_max * max(0.2, (ahead - 0.05) / 0.4))
         return Command(v, w, 'FOLLOW', info)

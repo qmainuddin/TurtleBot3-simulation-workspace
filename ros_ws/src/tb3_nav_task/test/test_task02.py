@@ -126,3 +126,70 @@ def test_bug2_abandons_after_full_circle_without_wall():
         if cmd.state == 'ABANDON':
             break
     assert 'ABANDON' in states and b.state == 'GO_GOAL' and 60 <= len(states) <= 70
+
+
+def _free_cells_connected(world, a, b, res=0.1, margin=0.13):
+    """Breadth-first search on a grid of cells where the robot footprint fits (route exists?)."""
+    from collections import deque
+    hx, hy = world.size_x / 2, world.size_y / 2
+    nx, ny = int(world.size_x / res), int(world.size_y / res)
+    cell = lambda p: (int((p[0] + hx) / res), int((p[1] + hy) / res))
+    free = lambda i, j: world.clearance(-hx + (i + 0.5) * res, -hy + (j + 0.5) * res) > margin
+    start, goal = cell(a), cell(b)
+    seen, q = {start}, deque([start])
+    while q:
+        c = q.popleft()
+        if c == goal:
+            return True
+        for d in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            n = (c[0] + d[0], c[1] + d[1])
+            if 0 <= n[0] < nx and 0 <= n[1] < ny and n not in seen and free(*n):
+                seen.add(n)
+                q.append(n)
+    return False
+
+
+def test_maze_has_a_route_and_blocks_the_straight_line():
+    w = WORLDS['maze']
+    assert _free_cells_connected(w, w.start[:2], w.goal)
+    # the straight start->goal segment crosses at least one wall
+    sx, sy, _ = w.start
+    pts = [(sx + (w.goal[0] - sx) * k / 200, sy + (w.goal[1] - sy) * k / 200) for k in range(201)]
+    assert min(w.clearance(x, y) for x, y in pts) < 0.0
+
+
+def test_offline_bug2_solves_maze_where_vfh_is_trapped():
+    w = WORLDS['maze']
+    assert simulate(w, 'bug2', timeout=600.0).success
+    assert not simulate(w, 'vfh', timeout=300.0).success
+
+
+def test_wall_angle_sign_and_default_follower_unchanged():
+    from tb3_nav_task.planners import Bug2Params
+    # wall 0.3 m to the right, rotated +0.2 rad (robot yawed toward it)
+    pts = ScanPoints()
+    for i in range(-10, 11):
+        t = i * 0.05
+        x, y = t * math.cos(0.2), -0.3 + t * math.sin(0.2)
+        pts.px.append(x); pts.py.append(y); pts.d.append(math.hypot(x, y)); pts.b.append(math.atan2(y, x))
+    assert abs(pts.wall_angle(-2.5, -0.5, 1.0) - 0.2) < 1e-6
+    assert Bug2Params().k_align == 0.0          # plans A-F used the P-only follower
+
+
+def test_bug2_turn_first_suppresses_hit_while_turning():
+    from tb3_nav_task.planners import Bug2Params
+    wall = ScanPoints()
+    for i in range(-10, 11):                   # wall 0.2 m ahead, goal behind the robot
+        x, y = 0.2, i * 0.02
+        wall.px.append(x); wall.py.append(y); wall.d.append(math.hypot(x, y)); wall.b.append(math.atan2(y, x))
+    assert Bug2Params().turn_first is False
+    assert Bug2(Bug2Params(turn_first=True)).step((0.0, 0.0, 0.0), (-3.0, 0.0), wall).state == 'GO_GOAL'
+    assert Bug2(Bug2Params()).step((0.0, 0.0, 0.0), (-3.0, 0.0), wall).state != 'GO_GOAL'
+
+
+def test_navigator_exposes_every_planner_parameter():
+    pytest.importorskip('rclpy')
+    from dataclasses import fields
+    from tb3_nav_task.navigator import TUNABLE
+    from tb3_nav_task.planners import Bug2Params, GapParams
+    assert {f.name for P in (GapParams, Bug2Params) for f in fields(P)} <= set(TUNABLE)

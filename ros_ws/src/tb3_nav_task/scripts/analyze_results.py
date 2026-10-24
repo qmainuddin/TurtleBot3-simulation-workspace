@@ -10,6 +10,9 @@ Outputs (in <results-dir>/analysis/):
   fig_B_speed.png               speed sweep (cluttered)
   fig_C_safety.png              safety-margin sweep (cluttered)
   fig_compute.png               per-cycle decision time distribution by strategy
+  fig_F_maze_trajectories.png   ground-truth paths of every plan-F trial (Trekker maze)
+  fig_G_maze_params.png         plan-G parameter variants of Bug2 in the maze
+  fig_H_maze_follower.png       Bug2 in the maze: original (plan F) vs wall-aligned follower (plan H)
 """
 import argparse
 import csv
@@ -30,6 +33,8 @@ from tb3_nav_task.geometry import Box, Cylinder  # noqa: E402
 from tb3_nav_task.worlds import WORLDS  # noqa: E402
 
 COLORS = {'vfh': '#1f77b4', 'bug2': '#d62728'}
+PARAM_COLORS = {'default': '#d62728', 'k_align: 2.0': '#2ca02c', 'k_align: 2.0, turn_first: true': '#1f77b4', 'k_align: 2.0, v_max: 0.22': '#ff7f0e',
+                'd_follow: 0.25, k_align: 2.0': '#9467bd', 'k_align: 2.0, localization: odom': '#8c564b'}
 NUM = ['success', 'reached', 'time_s', 'path_m', 'path_ratio', 'collisions', 'min_clear_m',
        'goal_err_m', 'odom_err_m', 'est_err_m', 'est_err_max_m', 'compute_mean_ms', 'compute_p95_ms', 'compute_max_ms', 'rtf',
        'contact_s']
@@ -122,7 +127,7 @@ def read_trace(results_dir, tid):
     return xs, ys
 
 
-def fig_trajectories(rows, results_dir, out):
+def fig_trajectories(rows, results_dir, out, title='Plan A: ground-truth trajectories (solid = success, dashed = failure)', color_key=None):
     worlds = [w for w in WORLDS if any(r['world'] == w for r in rows)]
     if not worlds:
         return
@@ -135,12 +140,14 @@ def fig_trajectories(rows, results_dir, out):
             if r['world'] != wn:
                 continue
             xs, ys = read_trace(results_dir, r['trial_id'])
-            lab = r['strategy'] if r['strategy'] not in seen else None
-            seen.add(r['strategy'])
-            ax.plot(xs, ys, color=COLORS.get(r['strategy'], 'k'), lw=1.4, alpha=0.8,
+            key = color_key(r) if color_key else r['strategy']
+            lab = key if key not in seen else None
+            seen.add(key)
+            col = (PARAM_COLORS.get(key, 'k') if color_key else COLORS.get(r['strategy'], 'k'))
+            ax.plot(xs, ys, color=col, lw=1.4, alpha=0.8,
                     ls='-' if r['success'] == 1 else '--', label=lab)
         ax.legend(loc='lower right', fontsize=8)
-    fig.suptitle('Plan A: ground-truth trajectories (solid = success, dashed = failure)')
+    fig.suptitle(title)
     fig.tight_layout()
     fig.savefig(out, dpi=130)
     plt.close(fig)
@@ -287,10 +294,15 @@ def main():
               'B': 'Plan B — speed sweep (cluttered world)',
               'C': 'Plan C — safety-margin sweep (cluttered world)',
               'D': 'Plan D — localization: wheel-only odometry (compare with plan A, gyro-fused)',
-              'E': 'Plan E — Bug2 without command shaping (compare with plan A)'}
+              'E': 'Plan E — Bug2 without command shaping (compare with plan A)',
+              'F': 'Plan F — Trekker maze: strategy comparison (default parameters, timeout 600 s)',
+              'G': 'Plan G — Trekker maze: parameter variants of the improved Bug2 (compare with plan H)',
+              'I': 'Plan I — Trekker maze: Bug2 with k_align 2.0 and turn-first leave (compare with plan H)',
+              'H': 'Plan H — Trekker maze: Bug2 with wall-alignment term k_align 2.0 (compare with plan F bug2)'}
     for p in sorted(plans):
         keys = (['world', 'strategy'] if p == 'A' else
-                ['world', 'strategy', 'params'] if p in ('D', 'E') else ['strategy', 'params'])
+                ['world', 'strategy'] if p == 'F' else
+                ['world', 'strategy', 'params'] if p in ('D', 'E', 'G', 'H', 'I') else ['strategy', 'params'])
         md += [f'## {titles.get(p, "Plan " + p)}', '', table(plans[p], keys), '']
         fails = [r for r in plans[p] if r['success'] != 1]
         if fails:
@@ -320,6 +332,18 @@ def main():
         a_match = [r for r in plans.get('A', []) if r['world'] in ('open_field', 'cluttered')
                    and int(float(r.get('variant', 0) or 0)) < 3]
         fig_localization(a_match, plans['D'], a.results_dir, os.path.join(out, 'fig_D_localization.png'))
+    if plans.get('F'):
+        fig_trajectories(plans['F'], a.results_dir, os.path.join(out, 'fig_F_maze_trajectories.png'),
+                         'Plan F: Trekker maze, ground-truth trajectories (solid = success, dashed = failure)')
+    if plans.get('H') or plans.get('F'):
+        fh = [r for r in plans.get('F', []) if r['strategy'] == 'bug2'] + plans.get('H', []) + plans.get('I', [])
+        fig_trajectories(fh, a.results_dir, os.path.join(out, 'fig_H_maze_follower.png'),
+                         'Plans F, H, I: Bug2 in the maze (original, + wall alignment, + turn-first leave)',
+                         color_key=param_label)
+    if plans.get('G'):
+        fig_trajectories(plans['G'], a.results_dir, os.path.join(out, 'fig_G_maze_params.png'),
+                         'Plan G: Bug2 variants in the maze (solid = success, dashed = failure)',
+                         color_key=param_label)
     fig_compute(rows, os.path.join(out, 'fig_compute.png'))
     print('\n'.join(md))
     print('figures ->', out)
