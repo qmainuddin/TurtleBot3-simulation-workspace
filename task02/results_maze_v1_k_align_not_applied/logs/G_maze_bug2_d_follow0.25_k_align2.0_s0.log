@@ -1,0 +1,162 @@
+ros2 launch tb3_nav_task trial.launch.py world:=maze strategy:=bug2 gui:=false trial_id:=G_maze_bug2_d_follow0.25_k_align2.0_s0 plan:=G variant:=0 start_x:=-3.4 start_y:=-2.4 start_yaw:=0.0 nav_params:={"d_follow": 0.25, "k_align": 2.0} results_dir:=/home/qms/vm-share/task02/results timeout:=600.0 verbose:=1
+[INFO] [launch]: All log files can be found below /home/qms/.ros/log/2026-10-24-13-52-42-573620-qms-13099
+[INFO] [launch]: Default logging verbosity is set to INFO
+urdf_file_name : turtlebot3_burger.urdf
+[INFO] [gazebo-1]: process started with pid [13102]
+[INFO] [create-2]: process started with pid [13103]
+[INFO] [parameter_bridge-3]: process started with pid [13105]
+[INFO] [parameter_bridge-4]: process started with pid [13106]
+[INFO] [robot_state_publisher-5]: process started with pid [13107]
+[INFO] [trial_monitor-6]: process started with pid [13108]
+[create-2] [INFO] [1792803163.053316408] [ros_gz_sim]: Requesting list of world names.
+[robot_state_publisher-5] [INFO] [1792803163.080925126] [robot_state_publisher]: Robot initialized
+[parameter_bridge-4] [INFO] [1792803163.105489200] [ground_truth_bridge]: Creating GZ->ROS Bridge: [/model/burger/pose (gz.msgs.Pose) -> /model/burger/pose (geometry_msgs/msg/PoseStamped)] (Lazy 0)
+[create-2] [INFO] [1792803163.555944731] [ros_gz_sim]: Entity creation successful.
+[trial_monitor-6] [INFO] [1792803163.652401752] [trial_monitor]: monitoring trial G_maze_bug2_d_follow0.25_k_align2.0_s0 in maze, timeout 600 s sim
+[INFO] [create-2]: process has finished cleanly [pid 13103]
+[parameter_bridge-3] [INFO] [1792803164.094588907] [tb3_bridge]: Creating GZ->ROS Bridge: [clock (gz.msgs.Clock) -> clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.100536869] [tb3_bridge]: Creating GZ->ROS Bridge: [joint_states (gz.msgs.Model) -> joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.104881221] [tb3_bridge]: Creating GZ->ROS Bridge: [odom (gz.msgs.Odometry) -> odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.108520887] [tb3_bridge]: Creating GZ->ROS Bridge: [tf (gz.msgs.Pose_V) -> tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.111024218] [tb3_bridge]: Creating ROS->GZ Bridge: [cmd_vel (geometry_msgs/msg/TwistStamped) -> cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.112752784] [tb3_bridge]: Creating GZ->ROS Bridge: [imu (gz.msgs.IMU) -> imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792803164.113984200] [tb3_bridge]: Creating GZ->ROS Bridge: [scan (gz.msgs.LaserScan) -> scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[gazebo-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="turtlebot3_burger"]/link[@name="base_scan"]/sensor[@name="hls_lfcd_lds"]/gz_frame_id:/tmp/tb3_nav_task_burger.sdf:L126]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gazebo-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[INFO] [navigator-7]: process started with pid [13293]
+[navigator-7] [INFO] [1792803166.806200641] [navigator]: navigator: strategy=bug2 localization=odom_imu shaping=True params={'v_max': 0.18, 'w_max': 1.5, 'hit_dist': 0.3, 'd_follow': 0.25, 'k_head': 2.0, 'k_wall': 3.0, 'mline_tol': 0.1, 'leave_progress': 0.15, 'min_follow': 0.5, 'goal_tol': 0.2, 'k_align': 0.0} start=(-3.4, -2.4, 0.0) goal=(3.0, 2.0)
+[navigator-7] [INFO] [1792803166.840628424] [navigator]: publishing TwistStamped on /cmd_vel
+[parameter_bridge-3] [INFO] [1792803166.922005313] [tb3_bridge]: Passing message from ROS geometry_msgs/msg/TwistStamped to Gazebo gz.msgs.Twist (showing msg only once per type)
+[navigator-7] [INFO] [1792803167.060425840] [navigator]: WAITING -> GO_GOAL  pose=(-3.40,-2.40,-0deg) goal_dist=7.77
+[trial_monitor-6] [INFO] [1792803167.075538909] [trial_monitor]: trial started (first active control cycle)
+[navigator-7] [INFO] [1792803179.290061998] [navigator]: GO_GOAL -> FOLLOW  pose=(-1.65,-1.25,35deg) goal_dist=5.68
+[navigator-7] [INFO] [1792803179.843544026] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.61,-1.23,27deg) goal_dist=5.63
+[navigator-7] [INFO] [1792803181.099008507] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.61,-1.23,48deg) goal_dist=5.62
+[navigator-7] [INFO] [1792803181.655488881] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.58,-1.19,57deg) goal_dist=5.58
+[navigator-7] [INFO] [1792803182.055474450] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.58,-1.18,59deg) goal_dist=5.57
+[navigator-7] [INFO] [1792803183.299694861] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.54,-1.09,68deg) goal_dist=5.49
+[navigator-7] [INFO] [1792803183.455068519] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.54,-1.09,70deg) goal_dist=5.49
+[navigator-7] [INFO] [1792803189.897654054] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.66,-0.30,93deg) goal_dist=5.20
+[navigator-7] [INFO] [1792803192.095721255] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.66,-0.30,142deg) goal_dist=5.20
+[navigator-7] [INFO] [1792803195.297956462] [navigator]: FOLLOW -> FOLLOW_ARC  pose=(-2.06,-0.14,174deg) goal_dist=5.49
+[navigator-7] [INFO] [1792803196.698406411] [navigator]: FOLLOW_ARC -> FOLLOW  pose=(-2.18,-0.11,150deg) goal_dist=5.59
+[navigator-7] [INFO] [1792803202.699301083] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-2.12,0.17,-11deg) goal_dist=5.44
+[navigator-7] [INFO] [1792803203.055333328] [navigator]: FOLLOW_TURN -> FOLLOW_ARC  pose=(-2.12,0.17,-18deg) goal_dist=5.44
+[navigator-7] [INFO] [1792803203.455562769] [navigator]: FOLLOW_ARC -> FOLLOW_TURN  pose=(-2.09,0.16,-20deg) goal_dist=5.42
+[navigator-7] [INFO] [1792803205.299712106] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-2.09,0.16,21deg) goal_dist=5.42
+[navigator-7] [INFO] [1792803210.164277310] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.58,0.48,2deg) goal_dist=4.83
+[navigator-7] [INFO] [1792803210.315275031] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.58,0.48,-2deg) goal_dist=4.83
+[navigator-7] [INFO] [1792803210.515086763] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.57,0.48,-5deg) goal_dist=4.82
+[navigator-7] [INFO] [1792803211.360407225] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.57,0.48,-4deg) goal_dist=4.82
+[navigator-7] [INFO] [1792803211.715520231] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.54,0.48,3deg) goal_dist=4.79
+[navigator-7] [INFO] [1792803213.560319514] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.54,0.48,53deg) goal_dist=4.79
+[navigator-7] [INFO] [1792803214.315032077] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.51,0.53,62deg) goal_dist=4.74
+[navigator-7] [INFO] [1792803214.959012988] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.51,0.54,73deg) goal_dist=4.74
+[navigator-7] [INFO] [1792803230.201302835] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.60,2.74,97deg) goal_dist=4.66
+[navigator-7] [INFO] [1792803231.997005977] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.60,2.74,137deg) goal_dist=4.66
+[navigator-7] [INFO] [1792803232.756753463] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.66,2.78,145deg) goal_dist=4.72
+[navigator-7] [INFO] [1792803233.401421267] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.66,2.78,156deg) goal_dist=4.72
+[navigator-7] [INFO] [1792803243.951448367] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.03,2.82,157deg) goal_dist=6.09
+[navigator-7] [INFO] [1792803244.104273457] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.04,2.82,158deg) goal_dist=6.09
+[navigator-7] [INFO] [1792803244.304212789] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.05,2.82,161deg) goal_dist=6.10
+[navigator-7] [INFO] [1792803244.504559110] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.05,2.82,165deg) goal_dist=6.10
+[navigator-7] [INFO] [1792803249.203605184] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.63,2.75,-161deg) goal_dist=6.67
+[navigator-7] [INFO] [1792803249.558405441] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.63,2.75,-157deg) goal_dist=6.67
+[navigator-7] [INFO] [1792803249.758251333] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.64,2.75,-153deg) goal_dist=6.68
+[navigator-7] [INFO] [1792803250.799211080] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.64,2.75,-122deg) goal_dist=6.68
+[navigator-7] [INFO] [1792803252.400787822] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.71,2.59,-111deg) goal_dist=6.73
+[navigator-7] [INFO] [1792803252.558309597] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.71,2.59,-108deg) goal_dist=6.73
+[navigator-7] [INFO] [1792803262.002282707] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.69,1.41,-118deg) goal_dist=6.72
+[navigator-7] [INFO] [1792803262.358352182] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.69,1.41,-113deg) goal_dist=6.72
+[navigator-7] [INFO] [1792803270.602894540] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.60,0.37,-109deg) goal_dist=6.80
+[navigator-7] [INFO] [1792803271.558416274] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.60,0.37,-94deg) goal_dist=6.80
+[navigator-7] [INFO] [1792803272.000262279] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.60,0.34,-84deg) goal_dist=6.81
+[navigator-7] [INFO] [1792803273.797653809] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.60,0.34,-32deg) goal_dist=6.81
+[navigator-7] [INFO] [1792803275.398597281] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.47,0.29,-18deg) goal_dist=6.69
+[navigator-7] [INFO] [1792803275.558439105] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.47,0.29,-15deg) goal_dist=6.69
+[navigator-7] [INFO] [1792803297.238671183] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.10,-0.26,151deg) goal_dist=6.51
+[navigator-7] [INFO] [1792803297.591089495] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.10,-0.26,157deg) goal_dist=6.51
+[navigator-7] [INFO] [1792803302.468450069] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.65,-0.27,-158deg) goal_dist=7.02
+[navigator-7] [INFO] [1792803303.220598721] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.65,-0.27,-138deg) goal_dist=7.03
+[navigator-7] [INFO] [1792803303.863038321] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.68,-0.30,-130deg) goal_dist=7.06
+[navigator-7] [INFO] [1792803304.420909578] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.68,-0.30,-119deg) goal_dist=7.07
+[navigator-7] [INFO] [1792803306.062898962] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.73,-0.46,-105deg) goal_dist=7.17
+[navigator-7] [INFO] [1792803306.220501476] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.73,-0.46,-103deg) goal_dist=7.17
+[navigator-7] [INFO] [1792803315.271874604] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.72,-1.64,-113deg) goal_dist=7.64
+[navigator-7] [INFO] [1792803315.430010382] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.72,-1.64,-111deg) goal_dist=7.64
+[navigator-7] [INFO] [1792803324.079065289] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.63,-2.68,-115deg) goal_dist=8.12
+[navigator-7] [INFO] [1792803324.830058651] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.63,-2.68,-103deg) goal_dist=8.12
+[navigator-7] [INFO] [1792803325.030426143] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.64,-2.69,-97deg) goal_dist=8.13
+[navigator-7] [INFO] [1792803326.876335995] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.64,-2.70,-37deg) goal_dist=8.13
+[navigator-7] [INFO] [1792803327.630355509] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.58,-2.73,-28deg) goal_dist=8.10
+[navigator-7] [INFO] [1792803327.830503118] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.57,-2.73,-27deg) goal_dist=8.10
+[navigator-7] [INFO] [1792803328.510875841] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-3.53,-2.75,-23deg) goal_dist=8.08
+[navigator-7] [INFO] [1792803328.636512740] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-3.53,-2.75,-22deg) goal_dist=8.07
+[navigator-7] [INFO] [1792803338.680965659] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-2.32,-2.74,-28deg) goal_dist=7.12
+[navigator-7] [INFO] [1792803339.038541552] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-2.31,-2.74,-22deg) goal_dist=7.12
+[navigator-7] [INFO] [1792803348.883167558] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.08,-2.73,-27deg) goal_dist=6.25
+[navigator-7] [INFO] [1792803349.041408209] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.08,-2.73,-26deg) goal_dist=6.25
+[navigator-7] [INFO] [1792803349.441498928] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-1.05,-2.74,-22deg) goal_dist=6.24
+[navigator-7] [INFO] [1792803349.641427958] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-1.05,-2.74,-21deg) goal_dist=6.24
+[navigator-7] [INFO] [1792803356.141649313] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-0.27,-2.63,10deg) goal_dist=5.67
+[navigator-7] [INFO] [1792803357.739750123] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-0.27,-2.63,45deg) goal_dist=5.67
+[navigator-7] [INFO] [1792803358.098875046] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-0.26,-2.61,54deg) goal_dist=5.64
+[navigator-7] [INFO] [1792803358.298863364] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-0.25,-2.61,55deg) goal_dist=5.64
+[navigator-7] [INFO] [1792803358.498826600] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-0.25,-2.60,56deg) goal_dist=5.63
+[navigator-7] [INFO] [1792803358.939915265] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-0.25,-2.60,61deg) goal_dist=5.63
+[navigator-7] [INFO] [1792803360.146485700] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(-0.20,-2.49,68deg) goal_dist=5.52
+[navigator-7] [INFO] [1792803360.302736149] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-0.20,-2.49,70deg) goal_dist=5.52
+[navigator-7] [INFO] [1792803371.349422031] [navigator]: FOLLOW -> FOLLOW_ARC  pose=(-0.14,-1.58,-48deg) goal_dist=4.76
+[navigator-7] [INFO] [1792803372.102784804] [navigator]: FOLLOW_ARC -> FOLLOW_TURN  pose=(-0.10,-1.64,-66deg) goal_dist=4.78
+[navigator-7] [INFO] [1792803373.148455640] [navigator]: FOLLOW_TURN -> FOLLOW_ARC  pose=(-0.10,-1.64,-57deg) goal_dist=4.78
+[navigator-7] [INFO] [1792803373.302921011] [navigator]: FOLLOW_ARC -> FOLLOW_TURN  pose=(-0.10,-1.65,-52deg) goal_dist=4.78
+[navigator-7] [INFO] [1792803374.344984943] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(-0.10,-1.65,-20deg) goal_dist=4.78
+[navigator-7] [INFO] [1792803382.547307710] [navigator]: FOLLOW -> FOLLOW_ARC  pose=(0.50,-1.92,-128deg) goal_dist=4.65
+[navigator-7] [INFO] [1792803382.902912437] [navigator]: FOLLOW_ARC -> FOLLOW  pose=(0.48,-1.94,-138deg) goal_dist=4.68
+[navigator-7] [INFO] [1792803384.342361327] [navigator]: FOLLOW -> FOLLOW_ARC  pose=(0.40,-1.97,180deg) goal_dist=4.74
+[navigator-7] [INFO] [1792803384.502825805] [navigator]: FOLLOW_ARC -> FOLLOW_TURN  pose=(0.39,-1.97,175deg) goal_dist=4.75
+[navigator-7] [INFO] [1792803385.547095443] [navigator]: FOLLOW_TURN -> FOLLOW_ARC  pose=(0.38,-1.97,-179deg) goal_dist=4.75
+[navigator-7] [INFO] [1792803385.703529809] [navigator]: FOLLOW_ARC -> FOLLOW  pose=(0.37,-1.97,-174deg) goal_dist=4.76
+[navigator-7] [INFO] [1792803385.903571946] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(0.36,-1.97,-170deg) goal_dist=4.77
+[navigator-7] [INFO] [1792803387.745565027] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(0.36,-1.97,-118deg) goal_dist=4.77
+[navigator-7] [INFO] [1792803393.746447554] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(0.38,-2.67,-68deg) goal_dist=5.35
+[navigator-7] [INFO] [1792803394.102839893] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(0.38,-2.67,-65deg) goal_dist=5.35
+[navigator-7] [INFO] [1792803394.502699785] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(0.39,-2.69,-58deg) goal_dist=5.37
+[navigator-7] [INFO] [1792803395.344235411] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(0.39,-2.69,-40deg) goal_dist=5.37
+[navigator-7] [INFO] [1792803396.302670207] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(0.46,-2.73,-31deg) goal_dist=5.37
+[navigator-7] [INFO] [1792803396.947276382] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(0.46,-2.74,-19deg) goal_dist=5.37
+[navigator-7] [INFO] [1792803406.759215097] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(1.79,-2.75,-20deg) goal_dist=4.90
+[navigator-7] [INFO] [1792803407.119441089] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(1.80,-2.75,-13deg) goal_dist=4.90
+[navigator-7] [INFO] [1792803421.961686227] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.77,-2.63,13deg) goal_dist=4.70
+[navigator-7] [INFO] [1792803423.164449342] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.77,-2.63,35deg) goal_dist=4.70
+[navigator-7] [INFO] [1792803423.322066970] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.78,-2.63,41deg) goal_dist=4.69
+[navigator-7] [INFO] [1792803423.722399327] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.78,-2.63,53deg) goal_dist=4.69
+[navigator-7] [INFO] [1792803424.963395225] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.83,-2.54,62deg) goal_dist=4.61
+[navigator-7] [INFO] [1792803425.321953439] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.83,-2.53,67deg) goal_dist=4.61
+[navigator-7] [INFO] [1792803435.361836905] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.82,-1.30,61deg) goal_dist=3.40
+[navigator-7] [INFO] [1792803435.922040066] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.82,-1.30,73deg) goal_dist=3.40
+[navigator-7] [INFO] [1792803454.173392188] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.79,1.21,62deg) goal_dist=1.12
+[navigator-7] [INFO] [1792803454.331346790] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.80,1.22,63deg) goal_dist=1.12
+[navigator-7] [INFO] [1792803454.931095579] [navigator]: FOLLOW -> FOLLOW_TURN  pose=(3.81,1.26,66deg) goal_dist=1.10
+[navigator-7] [INFO] [1792803455.371310644] [navigator]: FOLLOW_TURN -> FOLLOW  pose=(3.81,1.26,72deg) goal_dist=1.10
+[navigator-7] [INFO] [1792803463.772456306] [navigator]: FOLLOW -> LEAVE  pose=(3.76,2.41,69deg) goal_dist=0.87
+[navigator-7] [INFO] [1792803463.831372584] [navigator]: LEAVE -> GO_GOAL  pose=(3.77,2.42,68deg) goal_dist=0.87
+[navigator-7] [INFO] [1792803471.074622773] [navigator]: GO_GOAL -> REACHED  pose=(3.17,2.10,-149deg) goal_dist=0.19
+[trial_monitor-6] [INFO] [1792803471.513816119] [trial_monitor]: RESULT REACHED: success=True time=303.5s path=34.20m collisions=0 min_clear=0.064m goal_err=0.112m est_err=0.085m odom_err=7.234m rtf=0.998
+[INFO] [trial_monitor-6]: process has finished cleanly [pid 13108]
+[INFO] [navigator-7]: sending signal 'SIGINT' to process[navigator-7]
+[INFO] [robot_state_publisher-5]: sending signal 'SIGINT' to process[robot_state_publisher-5]
+[INFO] [parameter_bridge-4]: sending signal 'SIGINT' to process[parameter_bridge-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [gazebo-1]: sending signal 'SIGINT' to process[gazebo-1]
+[robot_state_publisher-5] [INFO] [1792803471.733060528] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-3] [INFO] [1792803471.736929246] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_bridge-4] [INFO] [1792803471.739634319] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [parameter_bridge-4]: process has finished cleanly [pid 13106]
+[INFO] [robot_state_publisher-5]: process has finished cleanly [pid 13107]
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 13105]
+[INFO] [navigator-7]: process has finished cleanly [pid 13293]
+[ERROR] [gazebo-1]: process[gazebo-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [gazebo-1]: sending signal 'SIGTERM' to process[gazebo-1]
+[ERROR] [gazebo-1]: process has died [pid 13102, exit code -15, cmd 'ruby /opt/ros/jazzy/opt/gz_tools_vendor/bin/gz sim -r -s -v1 /home/qms/ros_ws/install/tb3_nav_task/share/tb3_nav_task/worlds/maze.sdf --force-version 8'].
+[INFO] [launch]: process[gazebo-1] was required: shutting down launched system

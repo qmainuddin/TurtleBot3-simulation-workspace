@@ -5,7 +5,7 @@ Each WorldSpec is the single source of truth used to
   * measure ground-truth collisions/clearance in trial_monitor
   * run the fast offline 2D tests  (test/)
 
-Arena: 7.0 m x 5.0 m walled room, x in [-3.5, 3.5], y in [-2.5, 2.5].
+Arena: 7.0 m x 5.0 m walled room, x in [-3.5, 3.5], y in [-2.5, 2.5] (maze: 8.0 m x 6.0 m).
 Robot: TurtleBot3 Burger, ~0.18 m wide, so every gap is >= 0.5 m.
 """
 from __future__ import annotations
@@ -67,6 +67,55 @@ _register(WorldSpec(
         Box(0.60, 0.0, 0.10, 2.10, 0.0, 'u_back'),
         Box(0.05, 1.0, 1.20, 0.10, 0.0, 'u_arm_left'),
         Box(0.05, -1.0, 1.20, 0.10, 0.0, 'u_arm_right'),
+    ]))
+
+
+# 4) Trekker maze: six rooms behind a dividing wall, two dead-end rooms and a narrow corridor.
+#    Arena 8.0 m x 6.0 m, x in [-4, 4], y in [-3, 3]. Internal walls are 0.10 m thick.
+#
+#      +-------------+-------------+-------------+
+#      | N1 dead end | N2 dead end |  N3   goal  |
+#      |             |             |           : |   ':' = corridor door (0.65 m)
+#      +--- ---------+---- -------+-------------+:+
+#      |    ^door    |    ^door    |      S3   |:|   S3 -> narrow corridor along the east wall
+#      | S1 start    | S2          |           |:|
+#      |         door|         door|             |
+#      +-------------+-------------+-------------+
+#
+#    The only route: S1 -> (bottom door) S2 (around a wall stub) -> (bottom door) S3 -> 0.65 m corridor -> N3.
+#    The straight start->goal line is blocked by three walls; the doors that face the goal (into
+#    N1 and N2) lead to dead ends, the classic trap for goal-attracted reactive control.
+_T = 0.10
+
+
+def _hwall(x0: float, x1: float, y: float, name: str) -> Box:
+    return Box((x0 + x1) / 2.0, y, x1 - x0, _T, 0.0, name)
+
+
+def _vwall(x: float, y0: float, y1: float, name: str) -> Box:
+    return Box(x, (y0 + y1) / 2.0, _T, y1 - y0, 0.0, name)
+
+
+_register(WorldSpec(
+    name='maze',
+    description='Trekker maze: 6 rooms, 2 dead-end rooms, wall stub, 0.65 m corridor; only route along the south side',
+    size_x=8.0, size_y=6.0,
+    start=(-3.4, -2.4, 0.0), goal=(3.0, 2.0),
+    obstacles=[
+        # dividing wall y = 0 with doors into N1 (x -2.6..-1.9), N2 (x -0.2..0.5) and the corridor
+        _hwall(-4.0, -2.6, 0.0, 'mid_w'),
+        _hwall(-1.9, -0.2, 0.0, 'mid_c'),
+        _hwall(0.5, 3.35, 0.0, 'mid_e'),
+        # room partitions: south rooms open only at the bottom (doors y -3.0..-2.3)
+        _vwall(-1.3, -2.3, 0.0, 'part_s1_s2'),
+        _vwall(1.3, -2.3, 0.0, 'part_s2_s3'),
+        # north rooms are closed from each other
+        _vwall(-1.3, 0.0, 3.0, 'part_n1_n2'),
+        _vwall(1.3, 0.0, 3.0, 'part_n2_n3'),
+        # narrow corridor along the east wall: free width 4.0 - 3.35 = 0.65 m, entry at y < -2.2
+        _vwall(3.3, -2.2, 0.0, 'corridor_wall'),
+        # a wall stub rising from the south wall splits S2 into two bays (forces a 2.2 m detour)
+        _vwall(0.0, -3.0, -1.9, 'stub_s2'),
     ]))
 
 

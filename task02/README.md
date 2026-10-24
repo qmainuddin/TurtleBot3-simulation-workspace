@@ -2,6 +2,8 @@
 
 A simulated TurtleBot3 Burger drives from a start pad to a goal pad through custom obstacle worlds, using its 2D LiDAR, wheel odometry and IMU. Two controllers (VFH-style gap follower, Bug2) are compared in 75 scripted trials, scored from Gazebo ground truth.
 
+**Trekker (Team_Spartan) extension:** a fourth world, `maze` (8 m × 6 m, six rooms, two dead-end rooms, a wall stub and a 0.65 m corridor), with its own experiment plans F and G.
+
 | Item | Value |
 |---|---|
 | OS | Ubuntu 24.04.5 LTS, ARM64 (UTM VM on Apple Silicon) |
@@ -17,7 +19,7 @@ A simulated TurtleBot3 Burger drives from a start pad to a goal pad through cust
 vm-share/                                   (Mac folder shared into the VM as ~/vm-share)
 ├── ros_ws/src/tb3_nav_task/                ROS 2 package (code)
 │   ├── tb3_nav_task/
-│   │   ├── worlds.py        world definitions + SDF generator (single source of geometry)
+│   │   ├── worlds.py        world definitions + SDF generator (open_field, cluttered, u_trap, maze)
 │   │   ├── geometry.py      shapes, ray casting, footprint clearance
 │   │   ├── planners.py      VFH-lite gap follower and Bug2 (pure Python)
 │   │   ├── localization.py  wheel odometry vs gyro-fused dead reckoning
@@ -29,10 +31,11 @@ vm-share/                                   (Mac folder shared into the VM as ~/
 │   ├── scripts/run_experiments.py   batch experiments (plans A-D)
 │   ├── scripts/analyze_results.py   tables + figures
 │   ├── scripts/probe_sensors.py     LiDAR accuracy vs ground truth
-│   └── test/test_task02.py          19 unit/integration tests (pytest)
+│   └── test/test_task02.py          25 unit/integration tests (pytest)
 ├── task02/results/                results.csv, traces/, logs/, analysis/ (figures, summary.md)
 ├── task02/results_pilot_v1/       first 12 trials with the v1 controller (see experiments.md §5)
-└── scripts/                       VM set-up scripts (setup-all.sh, gltest*.sh, probe.sh)
+├── task02/results_maze_v1_k_align_not_applied/   first maze H/G run, k_align ignored (experiments.md §8.2)
+└── scripts/                       VM set-up scripts (setup-all.sh, gltest*.sh, probe.sh), run-maze.sh, stop-trials.sh
 ```
 
 The documents (`README.md`, `requirements.md`, `explanation.md`, `experiments.md`) and a copy of the results are in `discuss/assignments/task02/`.
@@ -55,6 +58,11 @@ ros2 launch tb3_nav_task trial.launch.py world:=u_trap strategy:=bug2 gui:=true
 
 # Same world with the reactive controller: watch it get trapped
 ros2 launch tb3_nav_task trial.launch.py world:=u_trap strategy:=vfh gui:=true
+
+# Trekker maze (Bug2 finds the only route; VFH gets lured into a dead-end room)
+bash ~/vm-share/scripts/run-maze.sh demo          # = trial.launch.py world:=maze strategy:=bug2 gui:=true timeout:=600.0
+                                                  #   nav_params:='{"k_align": 2.0, "turn_first": true}'
+bash ~/vm-share/scripts/run-maze.sh demo vfh
 
 # Other worlds / settings
 ros2 launch tb3_nav_task trial.launch.py world:=cluttered strategy:=vfh gui:=true nav_params:='{"v_max": 0.22}'
@@ -81,12 +89,16 @@ python3 ros_ws/src/tb3_nav_task/scripts/run_experiments.py --plan A B C D E   # 
 python3 ros_ws/src/tb3_nav_task/scripts/analyze_results.py                 # -> task02/results/analysis/
 ```
 
-Plans: **A** strategy × world × 4 starts; **B** speed sweep; **C** safety-margin sweep; **D** wheel-only odometry; **E** command shaping off. Each trial is headless and writes one row to `results.csv` plus a trajectory in `traces/`. An interrupted run resumes where it stopped.
+Plans: **A** strategy × world × 4 starts; **B** speed sweep; **C** safety-margin sweep; **D** wheel-only odometry; **E** command shaping off; **F** maze: VFH vs Bug2 × 4 starts; **H** maze: Bug2 with wall alignment (`k_align` 2.0) × 4; **G** maze: H plus v_max 0.22, d_follow 0.25 or wheel-only odometry × 3 starts; **I** maze: H plus `turn_first` × 4. Maze trials time out after 600 s (200 s elsewhere).
+
+```bash
+bash ~/vm-share/scripts/run-maze.sh               # rebuild + tests + plans H F G I + analysis (log: ~/vm-share/logs/maze_run.txt)
+``` Each trial is headless and writes one row to `results.csv` plus a trajectory in `traces/`. An interrupted run resumes where it stopped.
 
 ## Tests
 
 ```bash
-cd ~/vm-share/ros_ws/src/tb3_nav_task && python3 -m pytest -q test      # 19 passed
+cd ~/vm-share/ros_ws/src/tb3_nav_task && python3 -m pytest -q test      # 25 passed
 python3 -m tb3_nav_task.sim2d bug2                                        # offline 2D preview
 bash ~/vm-share/scripts/probe.sh open_field                               # LiDAR accuracy check
 ```

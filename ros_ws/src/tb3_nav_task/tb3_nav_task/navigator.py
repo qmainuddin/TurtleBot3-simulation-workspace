@@ -33,8 +33,13 @@ from std_msgs.msg import String
 from tb3_nav_task.localization import compose, make_estimator  # noqa: F401 (compose re-exported)
 from tb3_nav_task.planners import CommandShaper, ScanPoints, make_planner
 
-TUNABLE = ['v_max', 'w_max', 'safety', 'lookahead', 'k_w', 'slow_dist', 'stop_dist',
-           'hit_dist', 'd_follow', 'k_head', 'k_wall', 'mline_tol', 'leave_progress', 'goal_tol']
+# Every numeric/bool field of the planner parameter dataclasses can be overridden from the launch
+# file. (Until 24 Oct 2026 this was a hand-written list that missed k_align, so plans H and G of
+# the first maze run silently used k_align = 0; see experiments.md.)
+from dataclasses import fields as _fields  # noqa: E402
+from tb3_nav_task.planners import Bug2Params, GapParams  # noqa: E402
+_BOOL = {f.name for P in (GapParams, Bug2Params) for f in _fields(P) if f.type in (bool, 'bool')}
+TUNABLE = sorted({f.name for P in (GapParams, Bug2Params) for f in _fields(P)})
 
 
 def yaw_from_quat(q) -> float:
@@ -57,7 +62,7 @@ class Navigator(Node):
             self.declare_parameter(name, -1.0)           # -1 = keep the planner default
             val = self.get_parameter(name).value
             if val is not None and val >= 0.0:
-                overrides[name] = float(val)
+                overrides[name] = bool(val) if name in _BOOL else float(val)
 
         gp = lambda n: self.get_parameter(n).value  # noqa: E731
         self.strategy = gp('strategy')
