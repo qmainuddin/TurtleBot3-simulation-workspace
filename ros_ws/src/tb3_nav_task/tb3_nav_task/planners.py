@@ -359,6 +359,170 @@ class CommandShaper:
         self.w += clamp(w - self.w, p.a_ang * dt)
         return self.v, self.w
 
+# ---------------------------------------------------------------------------- strategy 3: A* Global Planner
+@dataclass
+class AStarParams:
+    v_max: float = 0.18            # m/s
+    w_max: float = 1.5             # rad/s
+    resolution: float = 0.05       # m per grid cell
+    robot_radius: float = 0.15     # m inflation radius
+    goal_tol: float = 0.20         # m
+    waypoint_tol: float = 0.30     # m distance to switch to next waypoint
+    k_w: float = 2.0               # heading gain
+
+
+class OccupancyGridMap:
+    """Discrete 2D occupancy grid map built from LiDAR scans and robot poses."""
+    def __init__(self, x_min: float = -4.0, x_max: float = 4.0,
+                 y_min: float = -3.0, y_max: float = 3.0,
+                 resolution: float = 0.05, inflation_radius: float = 0.15):
+        self.x_min = x_min
+        self.x_max = x_max
+        self.y_min = y_min
+        self.y_max = y_max
+        self.res = resolution
+        self.width = int(round((x_max - x_min) / resolution))
+        self.height = int(round((y_max - y_min) / resolution))
+        
+        # 0: free, 1: occupied, -1: unknown
+        self.grid = [[0 for _ in range(self.height)] for _ in range(self.width)]
+        self.inflation_cells = int(math.ceil(inflation_radius / resolution))
+
+    def world_to_grid(self, x: float, y: float) -> Tuple[int, int]:
+        gx = int(round((x - self.x_min) / self.res))
+        gy = int(round((y - self.y_min) / self.res))
+        return max(0, min(self.width - 1, gx)), max(0, min(self.height - 1, gy))
+
+    def grid_to_world(self, gx: int, gy: int) -> Tuple[float, float]:
+        x = self.x_min + gx * self.res
+        y = self.y_min + gy * self.res
+        return x, y
+
+    def update_from_scan(self, pose: Pose, scan: ScanPoints):
+        rx, ry, ryaw = pose
+        rgx, rgy = self.world_to_grid(rx, ry)
+        
+        # Transform LiDAR points to world frame and mark occupied
+        c, s = math.cos(ryaw), math.sin(ryaw)
+        for px, py in zip(scan.px, scan.py):
+            wx = rx + c * px - s * py
+            wy = ry + s * px + c * py
+            gx, gy = self.world_to_grid(wx, wy)
+            
+            # Inflate obstacle cells for safety margin
+            for dx in range(-self.inflation_cells, self.inflation_cells + 1):
+                for dy in range(-self.inflation_cells, self.inflation_cells + 1):
+                    nx, ny = gx + dx, gy + dy
+                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                        self.grid[nx][ny] = 1
+
+    def is_free(self, gx: int, gy: int) -> bool:
+        if not (0 <= gx < self.width and 0 <= gy < self.height):
+            return False
+        return self.grid[gx][gy] == 0
+
+
+class AStarPlanner:
+    name = 'astar'
+
+    def __init__(self, p: AStarParams = AStarParams()):
+        self.p = p
+        self.map = OccupancyGridMap(resolution=p.resolution, inflation_radius=p.robot_radius)
+        self.path: List[Tuple[float, float]] = []
+        self.last_goal: Optional[Tuple[float, float]] = None
+
+    def plan(self, start_pose: Pose, goal: Tuple[float, float]) -> List[Tuple[float, float]]:
+        sx, sy, _ = start_pose
+        sgx, sgy = self.map.world_to_grid(sx, sy)
+        ggx, ggy = self.map.world_to_grid(goal[0], goal[1])
+
+        if not self.map.is_free(ggx, ggy):
+            # If goal is blocked/unknown, find nearest free cell
+            ggx, ggy = self._find_nearest_free(ggx, ggy)
+
+        import heapq
+        open_set = []
+        heapq.heappush(open_set, (0.0, 0, sgx, sgy))
+        
+        came_from = {}
+        g_score = {(sgx, sgy): 0.0}
+        f_score = {(sgx, sgy): math.hypot(ggx - sgx, ggy - sgy)}
+        
+        closed_set = set()
+        neighbors = [(-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0),
+                     (-1, -1, 1.414), (-1, 1, 1.414), (1, -1, 1.414), (1, 1, 1.414)]
+
+        while open_set:
+            _, _, cx, cy = heapq.heappop(open_set)
+
+            if (cx, cy) == (ggx, ggy):
+                # Reconstruct path
+                path_grid = []
+                curr = (cx, cy)
+                while curr in came_from:
+                    path_grid.append(curr)
+                    curr = came_from[curr]
+                path_grid.reverse()
+                return [self.map.grid_to_world(gx, gy) for gx, gy in path_grid]
+
+            closed_set.add((cx, cy))
+
+            for dx, dy, cost in neighbors:
+                nx, ny = cx + dx, cy + dy
+                if not self.map.is_free(nx, ny) or (nx, ny) in closed_set:
+                    continue
+
+                tentative_g = g_score[(cx, cy)] + cost
+                if tentative_g < g_score.get((nx, ny), math.inf):
+                    came_from[(nx, ny)] = (cx, cy)
+                    g_score[(nx, ny)] = tentative_g
+                    f = tentative_g + math.hypot(ggx - nx, ggy - ny)
+                    f_score[(nx, ny)] = f
+                    heapq.heappush(open_set, (f, id((nx, ny)), nx, ny))
+
+        return [] # No path found
+
+    def _find_nearest_free(self, gx: int, gy: int) -> Tuple[int, int]:
+        for r in range(1, 20):
+            for dx in range(-r, r + 1):
+                for dy in range(-r, r + 1):
+                    nx, ny = gx + dx, gy + dy
+                    if self.map.is_free(nx, ny):
+                        return nx, ny
+        return gx, gy
+
+    def step(self, pose: Pose, goal: Tuple[float, float], scan: ScanPoints) -> Command:
+        p = self.p
+        dist, bearing = goal_polar(pose, goal)
+        if dist < p.goal_tol:
+            return Command(0.0, 0.0, 'REACHED', {'goal_dist': dist})
+
+        # Update occupancy grid map with current scan
+        self.map.update_from_scan(pose, scan)
+
+        # Re-plan if path is empty or goal changed significantly
+        if not self.path or self.last_goal != goal or len(self.path) == 0:
+            self.path = self.plan(pose, goal)
+            self.last_goal = goal
+
+        # Drop waypoints that are behind or too close
+        while self.path and math.hypot(self.path[0][0] - pose[0], self.path[0][1] - pose[1]) < p.waypoint_tol:
+            self.path.pop(0)
+
+        if not self.path:
+            # Fallback if A* fails: rotate in place to scan/clear
+            return Command(0.0, p.w_max, 'ESCAPE', {'goal_dist': dist})
+
+        # Target the next waypoint in the A* path
+        target_wp = self.path[0]
+        wp_dist, wp_bearing = goal_polar(pose, target_wp)
+
+        w = clamp(p.k_w * wp_bearing, p.w_max)
+        v = p.v_max * max(0.0, math.cos(wp_bearing)) ** 2
+        v = min(v, 0.6 * dist + 0.04)
+
+        return Command(v, w, 'GO_GOAL', {'goal_dist': dist, 'path_len': len(self.path)})
+
 
 def make_planner(name: str, **overrides):
     """Factory used by the ROS node: make_planner('vfh', v_max=0.12)."""
@@ -368,4 +532,7 @@ def make_planner(name: str, **overrides):
     if name == 'bug2':
         params = Bug2Params(**{k: v for k, v in overrides.items() if hasattr(Bug2Params, k)})
         return Bug2(params)
-    raise ValueError(f'unknown strategy {name!r} (use vfh or bug2)')
+    if name == 'astar':
+        params = AStarParams(**{k: v for k, v in overrides.items() if hasattr(AStarParams, k)})
+        return AStarPlanner(params)
+    raise ValueError(f'unknown strategy {name!r} (use vfh, bug2, or astar)')
